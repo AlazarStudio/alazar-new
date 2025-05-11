@@ -18,7 +18,7 @@ const sslOptions = {
 
 // Загружаем middleware и маршруты
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'server/uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/developers', developersRouter);
 app.use('/api/categories', categoriesRouter);
 app.use('/api/cases', casesRouter);
