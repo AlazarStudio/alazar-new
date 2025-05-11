@@ -5,8 +5,10 @@ const path = require('path');
 const developersRouter = require('./routes/developers');
 const categoriesRouter = require('./routes/categories');
 const casesRouter = require('./routes/cases');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 
 // Заменить на свои пути
 const sslOptions = {
