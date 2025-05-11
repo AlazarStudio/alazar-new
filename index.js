@@ -1,19 +1,25 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
+import fs from 'fs';
+import https from 'https';
+import express from 'express';
+import path from 'path';
 
 const app = express();
-const PORT = 3001;
+const __dirname = path.resolve();
 
-app.use(cors());
+// Заменить на свои пути
+const sslOptions = {
+  key: fs.readFileSync('/etc/letsencrypt/live/backend.alazarstudio.ru/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/backend.alazarstudio.ru/fullchain.pem')
+};
+
+// Загружаем middleware и маршруты
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'server/uploads')));
+app.use('/api/developers', await import('./routes/developers.js').then(m => m.default));
+app.use('/api/categories', await import('./routes/categories.js').then(m => m.default));
+app.use('/api/cases', await import('./routes/cases.js').then(m => m.default));
 
-// Роуты
-app.use('/api/developers', require('./routes/developers'));
-app.use('/api/categories', require('./routes/categories'));
-app.use('/api/cases', require('./routes/cases'));
-
-app.listen(PORT, () => {
-  console.log(`Сервер запущен: http://localhost:${PORT}`);
+// Запуск HTTPS-сервера
+https.createServer(sslOptions, app).listen(443, () => {
+  console.log('✅ HTTPS-сервер запущен: https://backend.alazarstudio.ru');
 });
