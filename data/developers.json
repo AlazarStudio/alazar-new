@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1746978058693,
+    "name": "Алим",
+    "position": "Разработчик",
+    "email": "alimdzhatdoev@mail.ru",
+    "avatar": "1746983171364.webp"
+  },
+  {
+    "id": 1746983199674,
+    "name": "Руслан",
+    "position": "Разработчик",
+    "email": "test@mail.ru",
+    "avatar": "1746983199670.jpg"
+  },
+  {
+    "id": 1746983373129,
+    "name": "Адамей",
+    "position": "Разработчик",
+    "email": "test2@mail.ru",
+    "avatar": "1746983373126.jpg"
+  }
+]
