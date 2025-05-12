@@ -56,7 +56,7 @@ router.get('/:id', (req, res) => {
 // 🔹 Добавить новый кейс
 router.post('/', upload.fields([
     { name: 'preview', maxCount: 1 },
-    { name: 'images', maxCount: 15 },
+    { name: 'images', maxCount: 10 },
 ]), (req, res) => {
     const cases = readData();
 
