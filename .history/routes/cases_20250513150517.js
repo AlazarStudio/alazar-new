@@ -59,6 +59,7 @@ router.post(
   '/',
   upload.fields([
     { name: 'preview', maxCount: 1 },
+    { name: 'gifPreview', maxCount: 1 },
     { name: 'images', maxCount: 30 },
   ]),
   (req, res) => {
@@ -73,6 +74,7 @@ router.post(
       positionTop: req.body.positionTop,
       developerIds: JSON.parse(req.body.developerIds || '[]'),
       categoryIds: JSON.parse(req.body.categoryIds || '[]'),
+      gifPreview: req.files?.gifPreview?.[0]?.filename || null,
       preview: req.files?.preview?.[0]?.filename || null,
       images: req.files?.images?.map((f) => f.filename) || [],
     };
@@ -105,6 +107,7 @@ router.put(
       positionTop: req.body.positionTop,
       developerIds: JSON.parse(req.body.developerIds || '[]'),
       categoryIds: JSON.parse(req.body.categoryIds || '[]'),
+      gifPreview: req.files?.gifPreview?.[0]?.filename || cases[index].preview,
       preview: req.files?.preview?.[0]?.filename || cases[index].preview,
       images:
         req.files?.images?.length > 0
