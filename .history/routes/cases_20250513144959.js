@@ -90,7 +90,6 @@ router.put(
   '/:id',
   upload.fields([
     { name: 'preview', maxCount: 1 },
-     { name: 'gifPreview', maxCount: 1 },
     { name: 'images', maxCount: 30 },
   ]),
   (req, res) => {
