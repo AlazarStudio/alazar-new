@@ -102,7 +102,7 @@ router.put(
       price: Number(req.body.price),
       link: req.body.link,
       date: req.body.date,
-      positionTop: req.body.positionTop,
+      positionTop: req.body.positionTop || false,
       developerIds: JSON.parse(req.body.developerIds || '[]'),
       categoryIds: JSON.parse(req.body.categoryIds || '[]'),
       preview: req.files?.preview?.[0]?.filename || cases[index].preview,
