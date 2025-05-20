@@ -1,11 +1,19 @@
-import { readFileSync } from "fs";
-import { createServer } from "http";
-import { createServer as _createServer } from "https";
-import express, { json } from "express";
-import { join } from "path";
-import cors from "cors";
-require("dotenv").config();
+import { readFileSync } from 'fs';
+import { createServer } from 'http';
+import { createServer as _createServer } from 'https';
+import express, { json } from 'express';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import cors from 'cors';
+import dotenv from 'dotenv';
 
+dotenv.config();
+
+// 🔹 Эмуляция __dirname в ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// 🔹 Импорт роутов
 // 🔹 Роутеры
 import authRoutes from "./serverRoutes/auth/auth.routes.js";
 import userRoutes from "./serverRoutes/user/user.routes.js";
@@ -15,39 +23,36 @@ import casesRouter from "./serverRoutes/cases.js";
 import discussionsRouter from "./serverRoutes/discussion.js";
 import contactsRouter from "./serverRoutes/contacts.js";
 
+// 🔹 Создание приложения
 const app = express();
+
 app.use(cors());
 app.use(json());
-app.use("/uploads", express.static(join(__dirname, "uploads")));
+app.use('/uploads', express.static(join(__dirname, 'uploads')));
 
-// 🔹 API
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/developers", developersRouter);
-app.use("/api/categories", categoriesRouter);
-app.use("/api/cases", casesRouter);
-app.use("/api/discussions", discussionsRouter);
-app.use("/api/contacts", contactsRouter);
+// 🔹 Роуты API
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/developers', developersRouter);
+app.use('/api/categories', categoriesRouter);
+app.use('/api/cases', casesRouter);
+app.use('/api/discussions', discussionsRouter);
+app.use('/api/contacts', contactsRouter);
 
-// 🔹 Конфигурация
+// 🔹 Порт и среда
 const PORT = process.env.PORT || 3000;
-const ENV = process.env.NODE_ENV || "development";
+const ENV = process.env.NODE_ENV || 'development';
 
-if (ENV === "production") {
+if (ENV === 'production') {
   const sslOptions = {
-    key: readFileSync(
-      "/etc/letsencrypt/live/backend.alazarstudio.ru/privkey.pem"
-    ),
-    cert: readFileSync(
-      "/etc/letsencrypt/live/backend.alazarstudio.ru/fullchain.pem"
-    ),
+    key: readFileSync('/etc/letsencrypt/live/backend.alazarstudio.ru/privkey.pem'),
+    cert: readFileSync('/etc/letsencrypt/live/backend.alazarstudio.ru/fullchain.pem'),
   };
 
   _createServer(sslOptions, app).listen(443, () => {
-    console.log("✅ HTTPS-сервер запущен: https://backend.alazarstudio.ru");
+    console.log('✅ HTTPS-сервер запущен: https://backend.alazarstudio.ru');
   });
 } else {
-  // 🔹 Локальный HTTP-сервер
   createServer(app).listen(PORT, () => {
     console.log(`🚀 HTTP-сервер запущен локально: http://localhost:${PORT}`);
   });

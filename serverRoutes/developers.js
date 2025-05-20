@@ -1,12 +1,17 @@
 import { Router } from 'express';
-
-const router = Router();
 import multer, { diskStorage } from 'multer';
-import { join, extname } from 'path';
+import { join, extname, dirname } from 'path';
 import { existsSync, mkdirSync, unlinkSync } from 'fs';
+import { fileURLToPath } from 'url';
 import { PrismaClient } from '@prisma/client';
 
+const router = Router();
 const prisma = new PrismaClient();
+
+// 🔹 Эмуляция __dirname для ES-модуля
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const UPLOAD_DIR = join(__dirname, '../uploads');
 
 if (!existsSync(UPLOAD_DIR)) mkdirSync(UPLOAD_DIR, { recursive: true });
