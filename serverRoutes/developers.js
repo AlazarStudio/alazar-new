@@ -8,7 +8,7 @@ import { PrismaClient } from '@prisma/client';
 const router = Router();
 const prisma = new PrismaClient();
 
-// 🔹 Эмуляция __dirname для ES-модуля
+// Эмуляция __dirname для ES-модулей
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -18,8 +18,7 @@ if (!existsSync(UPLOAD_DIR)) mkdirSync(UPLOAD_DIR, { recursive: true });
 
 const storage = diskStorage({
   destination: (_, __, cb) => cb(null, UPLOAD_DIR),
-  filename: (_, file, cb) =>
-    cb(null, Date.now() + extname(file.originalname)),
+  filename: (_, file, cb) => cb(null, Date.now() + extname(file.originalname)),
 });
 const upload = multer({ storage });
 
@@ -45,9 +44,9 @@ router.post('/', upload.single('image'), async (req, res) => {
   res.status(201).json(dev);
 });
 
-// Обновить
+// Обновить разработчика
 router.put('/:id', upload.single('image'), async (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id, 10);
   const dev = await prisma.developer.findUnique({ where: { id } });
   if (!dev) return res.status(404).json({ error: 'Не найдено' });
 
@@ -63,9 +62,9 @@ router.put('/:id', upload.single('image'), async (req, res) => {
   res.json(updated);
 });
 
-// Удалить
+// Удалить разработчика
 router.delete('/:id', async (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id, 10);
   const dev = await prisma.developer.findUnique({ where: { id } });
 
   if (!dev) return res.status(404).json({ error: 'Не найдено' });

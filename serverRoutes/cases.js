@@ -1,13 +1,18 @@
 import { Router } from 'express';
-const router = Router();
-import { join, extname } from 'path';
+import { join, extname, dirname } from 'path';
 import { existsSync, mkdirSync, unlinkSync } from 'fs';
 import multer, { diskStorage } from 'multer';
 import { PrismaClient } from '@prisma/client';
+import { fileURLToPath } from 'url';
 
+const router = Router();
 const prisma = new PrismaClient();
-const UPLOAD_DIR = join(__dirname, '../uploads');
 
+// 🔧 Эмуляция __dirname для ES-модуля
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const UPLOAD_DIR = join(__dirname, '../uploads');
 if (!existsSync(UPLOAD_DIR)) mkdirSync(UPLOAD_DIR, { recursive: true });
 
 const storage = diskStorage({
@@ -19,13 +24,13 @@ const storage = diskStorage({
 });
 const upload = multer({ storage });
 
-// Получить все кейсы
+// 🔹 Получить все кейсы
 router.get('/', async (req, res) => {
   const data = await prisma.case.findMany();
   res.json(data);
 });
 
-// Получить кейс по ID
+// 🔹 Получить кейс по ID
 router.get('/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   const found = await prisma.case.findUnique({ where: { id } });
@@ -33,7 +38,7 @@ router.get('/:id', async (req, res) => {
   res.json(found);
 });
 
-// Добавить новый кейс
+// 🔹 Добавить новый кейс
 router.post(
   '/',
   upload.fields([
@@ -58,7 +63,7 @@ router.post(
   }
 );
 
-// Обновить кейс
+// 🔹 Обновить кейс
 router.put(
   '/:id',
   upload.fields([
@@ -92,7 +97,7 @@ router.put(
   }
 );
 
-// Удалить кейс
+// 🔹 Удалить кейс
 router.delete('/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   const existing = await prisma.case.findUnique({ where: { id } });

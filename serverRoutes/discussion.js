@@ -1,21 +1,33 @@
 import { Router } from 'express';
 const router = Router();
 import { PrismaClient } from '@prisma/client';
+
 const prisma = new PrismaClient();
 
-// Получить все заявки
+// Получить все заявки, отсортированные по дате создания (новые первыми)
 router.get('/', async (req, res) => {
-  const data = await prisma.discussion.findMany({ orderBy: { createdAt: 'desc' } });
-  res.json(data);
+  try {
+    const data = await prisma.discussion.findMany({ orderBy: { createdAt: 'desc' } });
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Ошибка при получении заявок' });
+  }
 });
 
-// Добавить заявку
+// Добавить новую заявку
 router.post('/', async (req, res) => {
   const { name, phone, email, company, budget, message } = req.body;
 
   try {
     const newItem = await prisma.discussion.create({
-      data: { name, phone, email, company, budget: Number(budget), message },
+      data: {
+        name,
+        phone,
+        email,
+        company,
+        budget: Number(budget),
+        message,
+      },
     });
     res.status(201).json(newItem);
   } catch (error) {
@@ -23,15 +35,15 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Удалить заявку
+// Удалить заявку по ID
 router.delete('/:id', async (req, res) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id, 10);
 
   try {
     await prisma.discussion.delete({ where: { id } });
     res.json({ success: true });
-  } catch {
-    res.status(404).json({ error: 'Не найдено' });
+  } catch (error) {
+    res.status(404).json({ error: 'Заявка не найдена' });
   }
 });
 
