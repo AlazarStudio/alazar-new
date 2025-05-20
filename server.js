@@ -16,11 +16,11 @@ const __dirname = dirname(__filename);
 // 🔹 Импорт роутов
 import authRoutes from "./serverRoutes/auth/auth.routes.js";
 import userRoutes from "./serverRoutes/user/user.routes.js";
-import developersRouter from "./serverRoutes/developers/index.js";
-import categoriesRouter from "./serverRoutes/categories/index.js";
-import casesRouter from "./serverRoutes/cases/index.js";
-import discussionsRouter from "./serverRoutes/discussion/index.js";
-import contactsRouter from "./serverRoutes/contacts/index.js";
+import developersRouter from "./serverRoutes/developer";
+import categoriesRouter from "./serverRoutes/categories";
+import casesRouter from "./serverRoutes/cases";
+import discussionsRouter from "./serverRoutes/discussion";
+import contactsRouter from "./serverRoutes/contacts";
 
 // 🔹 Создание приложения
 const app = express();
