@@ -1,18 +1,17 @@
 import { Router } from 'express';
-const router = Router();
 import { existsSync, mkdirSync, writeFileSync, readFileSync, unlinkSync } from 'fs';
-import { join, extname } from 'path';
+import { join, extname, dirname } from 'path';
 import multer, { diskStorage } from 'multer';
 
-// Пути
-const DATA_FILE = join(__dirname, '../data/developers.json');
+const router = Router();
+
+// 🔹 Эмуляция __dirname для ES-модуля
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const UPLOAD_DIR = join(__dirname, '../uploads');
 
-// Создать папку uploads при необходимости
-if (!existsSync(UPLOAD_DIR)) {
-  mkdirSync(UPLOAD_DIR, { recursive: true });
-}
-
+if (!existsSync(UPLOAD_DIR)) mkdirSync(UPLOAD_DIR, { recursive: true });
 // Настройка multer
 const storage = diskStorage({
   destination: (_, __, cb) => {

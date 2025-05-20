@@ -1,16 +1,15 @@
 import { Router } from 'express';
-
-const router = Router();
 import { existsSync, mkdirSync, writeFileSync, readFileSync, unlinkSync } from 'fs';
-import { join, extname } from 'path';
+import { join, extname, dirname } from 'path';
 import multer, { diskStorage } from 'multer';
 
-const DATA_FILE = join(__dirname, '../data/cases.json');
-const UPLOAD_DIR = join(__dirname, '../uploads');
+const router = Router();
 
-if (!existsSync(UPLOAD_DIR)) {
-  mkdirSync(UPLOAD_DIR, { recursive: true });
-}
+// 🔹 Эмуляция __dirname для ES-модуля
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const UPLOAD_DIR = join(__dirname, '../uploads');
 
 // Хранилище для изображений
 const storage = diskStorage({
