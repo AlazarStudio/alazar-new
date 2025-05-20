@@ -1,29 +1,34 @@
-// const fs = require('fs');
-// const https = require('https');
-// const express = require('express');
-// const path = require('path');
-// const developersRouter = require('./routes/developers');
-// const categoriesRouter = require('./routes/categories');
-// const casesRouter = require('./routes/cases');
-// const cors = require('cors');
+import { readFileSync } from 'fs';
+import { createServer } from 'https';
+import express, { json } from 'express';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import developersRouter from './routes/developers';
+import categoriesRouter from './routes/categories';
+import casesRouter from './routes/cases';
+import cors from 'cors';
 
-// const app = express();
-// app.use(cors());
+// 🔹 Эмуляция __dirname в ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-// // Заменить на свои пути
-// const sslOptions = {
-//   key: fs.readFileSync('/etc/letsencrypt/live/backend.alazarstudio.ru/privkey.pem'),
-//   cert: fs.readFileSync('/etc/letsencrypt/live/backend.alazarstudio.ru/fullchain.pem')
-// };
+const app = express();
+app.use(cors());
 
-// // Загружаем middleware и маршруты
-// app.use(express.json());
-// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-// app.use('/api/developers', developersRouter);
-// app.use('/api/categories', categoriesRouter);
-// app.use('/api/cases', casesRouter);
+// Заменить на свои пути
+const sslOptions = {
+  key: readFileSync('/etc/letsencrypt/live/backend.alazarstudio.ru/privkey.pem'),
+  cert: readFileSync('/etc/letsencrypt/live/backend.alazarstudio.ru/fullchain.pem')
+};
 
-// // Запуск HTTPS-сервера
-// https.createServer(sslOptions, app).listen(443, () => {
-//   console.log('✅ HTTPS-сервер запущен: https://backend.alazarstudio.ru');
-// });
+// Загружаем middleware и маршруты
+app.use(json());
+app.use('/uploads', express.static(join(__dirname, 'uploads')));
+app.use('/api/developers', developersRouter);
+app.use('/api/categories', categoriesRouter);
+app.use('/api/cases', casesRouter);
+
+// Запуск HTTPS-сервера
+createServer(sslOptions, app).listen(443, () => {
+  console.log('✅ HTTPS-сервер запущен: https://backend.alazarstudio.ru');
+});
