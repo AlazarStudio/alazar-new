@@ -1,19 +1,19 @@
-const express = require('express');
-const router = express.Router();
-const path = require('path');
-const fs = require('fs');
-const multer = require('multer');
-const { PrismaClient } = require('@prisma/client');
+import { Router } from 'express';
+const router = Router();
+import { join, extname } from 'path';
+import { existsSync, mkdirSync, unlinkSync } from 'fs';
+import multer, { diskStorage } from 'multer';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
-const UPLOAD_DIR = path.join(__dirname, '../uploads');
+const UPLOAD_DIR = join(__dirname, '../uploads');
 
-if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+if (!existsSync(UPLOAD_DIR)) mkdirSync(UPLOAD_DIR, { recursive: true });
 
-const storage = multer.diskStorage({
+const storage = diskStorage({
   destination: (_, __, cb) => cb(null, UPLOAD_DIR),
   filename: (_, file, cb) => {
-    const ext = path.extname(file.originalname);
+    const ext = extname(file.originalname);
     cb(null, `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`);
   },
 });
@@ -101,18 +101,18 @@ router.delete('/:id', async (req, res) => {
 
   if (existing.images?.length) {
     existing.images.forEach((file) => {
-      const filePath = path.join(UPLOAD_DIR, file);
-      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      const filePath = join(UPLOAD_DIR, file);
+      if (existsSync(filePath)) unlinkSync(filePath);
     });
   }
 
   if (existing.preview) {
-    const previewPath = path.join(UPLOAD_DIR, existing.preview);
-    if (fs.existsSync(previewPath)) fs.unlinkSync(previewPath);
+    const previewPath = join(UPLOAD_DIR, existing.preview);
+    if (existsSync(previewPath)) unlinkSync(previewPath);
   }
 
   await prisma.case.delete({ where: { id } });
   res.json({ success: true });
 });
 
-module.exports = router;
+export default router;

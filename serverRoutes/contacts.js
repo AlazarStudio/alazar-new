@@ -1,6 +1,6 @@
-const express = require('express');
-const router = express.Router();
-const { PrismaClient } = require('@prisma/client');
+import { Router } from 'express';
+const router = Router();
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 // Получить текущие контакты
@@ -39,4 +39,4 @@ router.post('/', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

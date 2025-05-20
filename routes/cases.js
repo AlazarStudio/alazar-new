@@ -1,22 +1,22 @@
-const express = require('express');
+import { Router } from 'express';
 
-const router = express.Router();
-const fs = require('fs');
-const path = require('path');
-const multer = require('multer');
+const router = Router();
+import { existsSync, mkdirSync, writeFileSync, readFileSync, unlinkSync } from 'fs';
+import { join, extname } from 'path';
+import multer, { diskStorage } from 'multer';
 
-const DATA_FILE = path.join(__dirname, '../data/cases.json');
-const UPLOAD_DIR = path.join(__dirname, '../uploads');
+const DATA_FILE = join(__dirname, '../data/cases.json');
+const UPLOAD_DIR = join(__dirname, '../uploads');
 
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+if (!existsSync(UPLOAD_DIR)) {
+  mkdirSync(UPLOAD_DIR, { recursive: true });
 }
 
 // Хранилище для изображений
-const storage = multer.diskStorage({
+const storage = diskStorage({
   destination: (_, __, cb) => cb(null, UPLOAD_DIR),
   filename: (_, file, cb) => {
-    const ext = path.extname(file.originalname);
+    const ext = extname(file.originalname);
     cb(null, `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`);
   },
 });
@@ -25,8 +25,8 @@ const upload = multer({ storage });
 
 const readData = () => {
   try {
-    if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, '[]');
-    const content = fs.readFileSync(DATA_FILE, 'utf-8');
+    if (!existsSync(DATA_FILE)) writeFileSync(DATA_FILE, '[]');
+    const content = readFileSync(DATA_FILE, 'utf-8');
     return JSON.parse(content || '[]');
   } catch {
     return [];
@@ -34,7 +34,7 @@ const readData = () => {
 };
 
 const writeData = (data) => {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+  writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 };
 
 // 🔹 Получить все кейсы
@@ -126,9 +126,9 @@ router.delete('/:id', (req, res) => {
 
   if (item?.images?.length) {
     item.images.forEach((filename) => {
-      const filePath = path.join(UPLOAD_DIR, filename);
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
+      const filePath = join(UPLOAD_DIR, filename);
+      if (existsSync(filePath)) {
+        unlinkSync(filePath);
       }
     });
   }
@@ -138,4 +138,4 @@ router.delete('/:id', (req, res) => {
   res.json({ success: true });
 });
 
-module.exports = router;
+export default router;

@@ -1,25 +1,25 @@
-const express = require('express');
-const router = express.Router();
-const fs = require('fs');
-const path = require('path');
-const multer = require('multer');
+import { Router } from 'express';
+const router = Router();
+import { existsSync, mkdirSync, writeFileSync, readFileSync, unlinkSync } from 'fs';
+import { join, extname } from 'path';
+import multer, { diskStorage } from 'multer';
 
 // Пути
-const DATA_FILE = path.join(__dirname, '../data/developers.json');
-const UPLOAD_DIR = path.join(__dirname, '../uploads');
+const DATA_FILE = join(__dirname, '../data/developers.json');
+const UPLOAD_DIR = join(__dirname, '../uploads');
 
 // Создать папку uploads при необходимости
-if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+if (!existsSync(UPLOAD_DIR)) {
+  mkdirSync(UPLOAD_DIR, { recursive: true });
 }
 
 // Настройка multer
-const storage = multer.diskStorage({
+const storage = diskStorage({
   destination: (_, __, cb) => {
     cb(null, UPLOAD_DIR);
   },
   filename: (_, file, cb) => {
-    const ext = path.extname(file.originalname);
+    const ext = extname(file.originalname);
     cb(null, Date.now() + ext);
   },
 });
@@ -28,10 +28,10 @@ const upload = multer({ storage });
 // Чтение файла с безопасностью
 const readData = () => {
   try {
-    if (!fs.existsSync(DATA_FILE)) {
-      fs.writeFileSync(DATA_FILE, '[]');
+    if (!existsSync(DATA_FILE)) {
+      writeFileSync(DATA_FILE, '[]');
     }
-    const content = fs.readFileSync(DATA_FILE, 'utf-8');
+    const content = readFileSync(DATA_FILE, 'utf-8');
     return JSON.parse(content || '[]');
   } catch {
     return [];
@@ -40,7 +40,7 @@ const readData = () => {
 
 // Запись данных
 const writeData = (data) => {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+  writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 };
 
 // Получить всех
@@ -94,9 +94,9 @@ router.delete('/:id', (req, res) => {
 
   // Удаление файла (необязательно, но можно)
   if (dev?.avatar) {
-    const avatarPath = path.join(UPLOAD_DIR, dev.avatar);
-    if (fs.existsSync(avatarPath)) {
-      fs.unlinkSync(avatarPath);
+    const avatarPath = join(UPLOAD_DIR, dev.avatar);
+    if (existsSync(avatarPath)) {
+      unlinkSync(avatarPath);
     }
   }
 
@@ -105,4 +105,4 @@ router.delete('/:id', (req, res) => {
   res.json({ success: true });
 });
 
-module.exports = router;
+export default router;
