@@ -3,9 +3,9 @@ import { createServer } from 'https';
 import express, { json } from 'express';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import developersRouter from './routes/developers';
-import categoriesRouter from './routes/categories';
-import casesRouter from './routes/cases';
+import developersRouter from './routes/developers.js';
+import categoriesRouter from './routes/categories.js';
+import casesRouter from './routes/cases.js';
 import cors from 'cors';
 
 // 🔹 Эмуляция __dirname в ESM
