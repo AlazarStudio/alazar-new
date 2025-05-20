@@ -10,6 +10,7 @@ const router = Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const DATA_FILE = join(__dirname, '../data/cases.json');
 const UPLOAD_DIR = join(__dirname, '../uploads');
 
 // Хранилище для изображений
