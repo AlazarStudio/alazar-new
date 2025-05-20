@@ -3,7 +3,6 @@ import { hash, verify } from 'argon2';
 import asyncHandler from 'express-async-handler';
 
 import { prisma } from '../../prisma.js';
-import { UserFields } from '../utils/user.utils.js';
 
 import { generateToken } from './generate-token.js';
 
@@ -62,8 +61,7 @@ export const registerUser = asyncHandler(async (req, res) => {
       email,
       password: await hash(password),
       name
-    },
-    select: UserFields,
+    }
   });
 
   const token = generateToken(user.id);
