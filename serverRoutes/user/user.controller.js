@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler'
 
-import { prisma } from '../prisma.js'
+import { prisma } from '../../prisma.js'
 import { UserFields } from '../utils/user.utils.js'
 
 // @desc    Get user profile
