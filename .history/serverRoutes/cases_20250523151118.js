@@ -60,7 +60,6 @@ router.post(
         developerIds,
         categoryIds,
         blocks,
-        shop,
       } = req.body;
 
       const parsedBlocksRaw = JSON.parse(blocks || '[]');
@@ -84,7 +83,6 @@ router.post(
           taskDescription,
           clientDescription,
           serviceDescription,
-          shop: shop === 'true',
           developerIds: JSON.parse(developerIds || '[]'),
           categoryIds: JSON.parse(categoryIds || '[]'),
           preview: req.files?.preview?.[0]?.filename || null,
@@ -107,72 +105,31 @@ router.put(
   upload.fields([
     { name: 'preview', maxCount: 1 },
     { name: 'images', maxCount: 30 },
-    { name: 'blockImages', maxCount: 50 },
   ]),
   async (req, res) => {
-    try {
-      const id = parseInt(req.params.id);
-      const existing = await prisma.case.findUnique({ where: { id } });
-      if (!existing) return res.status(404).json({ error: 'Кейс не найден' });
+    const id = parseInt(req.params.id);
+    const existing = await prisma.case.findUnique({ where: { id } });
+    if (!existing) return res.status(404).json({ error: 'Кейс не найден' });
 
-      const {
-        title,
-        price,
-        link,
-        date,
-        positionTop,
-        developerIds,
-        categoryIds,
-        taskDescription,
-        clientDescription,
-        serviceDescription,
-        shop,
-        blocks,
-      } = req.body;
+    const updated = await prisma.case.update({
+      where: { id },
+      data: {
+        title: req.body.title,
+        price: parseInt(req.body.price),
+        link: req.body.link,
+        date: req.body.date,
+        positionTop: req.body.positionTop,
+        developerIds: JSON.parse(req.body.developerIds || '[]'),
+        categoryIds: JSON.parse(req.body.categoryIds || '[]'),
+        preview: req.files?.preview?.[0]?.filename || existing.preview,
+        images:
+          req.files?.images?.length > 0
+            ? req.files.images.map((f) => f.filename)
+            : existing.images,
+      },
+    });
 
-      let parsedBlocks = existing.contentBlocks || [];
-
-      if (blocks) {
-        const rawBlocks = JSON.parse(blocks);
-        let imgIndex = 0;
-        parsedBlocks = rawBlocks.map((b) => {
-          if (b.type === 'text') return b;
-          const file = req.files?.blockImages?.[imgIndex++];
-          return {
-            type: 'image',
-            value: file?.filename || b.value, // если новое изображение — берём новое, иначе оставляем старое
-          };
-        });
-      }
-
-      const updated = await prisma.case.update({
-        where: { id },
-        data: {
-          title,
-          price: parseInt(price),
-          link,
-          date,
-          positionTop,
-          shop: shop === 'true',
-          taskDescription,
-          clientDescription,
-          serviceDescription,
-          developerIds: JSON.parse(developerIds || '[]'),
-          categoryIds: JSON.parse(categoryIds || '[]'),
-          preview: req.files?.preview?.[0]?.filename || existing.preview,
-          images:
-            req.files?.images?.length > 0
-              ? req.files.images.map((f) => f.filename)
-              : existing.images,
-          contentBlocks: parsedBlocks,
-        },
-      });
-
-      res.json(updated);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Ошибка при обновлении кейса' });
-    }
+    res.json(updated);
   }
 );
 

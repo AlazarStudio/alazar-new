@@ -84,7 +84,7 @@ router.post(
           taskDescription,
           clientDescription,
           serviceDescription,
-          shop: shop === 'true',
+          shop,
           developerIds: JSON.parse(developerIds || '[]'),
           categoryIds: JSON.parse(categoryIds || '[]'),
           preview: req.files?.preview?.[0]?.filename || null,
@@ -153,7 +153,7 @@ router.put(
           link,
           date,
           positionTop,
-          shop: shop === 'true',
+          shop
           taskDescription,
           clientDescription,
           serviceDescription,

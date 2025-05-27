@@ -40,7 +40,6 @@ model Case {
   clientDescription  String
   serviceDescription String
   contentBlocks      Json
-  shop               Boolean @default(false)
 }
 
 model Developer {

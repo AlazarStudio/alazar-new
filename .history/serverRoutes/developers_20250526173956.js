@@ -30,19 +30,7 @@ router.get('/', async (req, res) => {
 
 // Добавить разработчика
 router.post('/', upload.single('image'), async (req, res) => {
-  const {
-    name,
-    position,
-    email,
-    telegram,
-    instagram,
-    whatsapp,
-    vk,
-    tiktok,
-    behance,
-    pinterest,
-    artstation,
-  } = req.body;
+  const { name, position, email } = req.body;
   const avatar = req.file?.filename || null;
 
   const dev = await prisma.developer.create({
@@ -51,14 +39,7 @@ router.post('/', upload.single('image'), async (req, res) => {
       position,
       avatar,
       email,
-      telegram,
-      instagram,
-      whatsapp,
-      vk,
-      tiktok,
-      behance,
-      pinterest,
-      artstation,
+      
     },
   });
   res.status(201).json(dev);
@@ -77,14 +58,6 @@ router.put('/:id', upload.single('image'), async (req, res) => {
       position: req.body.position,
       email: req.body.email,
       avatar: req.file?.filename || dev.avatar,
-      telegram: req.body.telegram,
-      instagram: req.body.instagram,
-      whatsapp: req.body.whatsapp,
-      vk: req.body.vk,
-      tiktok: req.body.tiktok,
-      behance: req.body.behance,
-      pinterest: req.body.pinterest,
-      artstation: req.body.artstation,
     },
   });
   res.json(updated);

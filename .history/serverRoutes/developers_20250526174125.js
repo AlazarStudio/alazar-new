@@ -80,11 +80,11 @@ router.put('/:id', upload.single('image'), async (req, res) => {
       telegram: req.body.telegram,
       instagram: req.body.instagram,
       whatsapp: req.body.whatsapp,
-      vk: req.body.vk,
-      tiktok: req.body.tiktok,
-      behance: req.body.behance,
-      pinterest: req.body.pinterest,
-      artstation: req.body.artstation,
+      vk: req.body.,
+      tiktok,
+      behance,
+      pinterest,
+      artstation,
     },
   });
   res.json(updated);

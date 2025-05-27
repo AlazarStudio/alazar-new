@@ -42,6 +42,7 @@ router.post('/', upload.single('image'), async (req, res) => {
     behance,
     pinterest,
     artstation,
+    shop,
   } = req.body;
   const avatar = req.file?.filename || null;
 
@@ -59,6 +60,7 @@ router.post('/', upload.single('image'), async (req, res) => {
       behance,
       pinterest,
       artstation,
+      shop,
     },
   });
   res.status(201).json(dev);

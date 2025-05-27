@@ -36,27 +36,15 @@ model Case {
   developerIds Int[]    @default([])
   categoryIds  Int[]    @default([])
 
-  taskDescription    String
-  clientDescription  String
-  serviceDescription String
-  contentBlocks      Json
-  shop               Boolean @default(false)
+  taskDescription String?
 }
 
 model Developer {
-  id         Int     @id @default(autoincrement())
-  name       String
-  position   String
-  email      String
-  avatar     String?
-  telegram   String?
-  instagram  String?
-  whatsapp   String?
-  vk         String?
-  tiktok     String?
-  behance    String?
-  pinterest  String?
-  artstation String?
+  id       Int     @id @default(autoincrement())
+  name     String
+  position String
+  email    String
+  avatar   String?
 }
 
 model Category {

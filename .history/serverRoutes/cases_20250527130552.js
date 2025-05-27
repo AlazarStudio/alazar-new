@@ -60,7 +60,6 @@ router.post(
         developerIds,
         categoryIds,
         blocks,
-        shop,
       } = req.body;
 
       const parsedBlocksRaw = JSON.parse(blocks || '[]');
@@ -84,7 +83,6 @@ router.post(
           taskDescription,
           clientDescription,
           serviceDescription,
-          shop: shop === 'true',
           developerIds: JSON.parse(developerIds || '[]'),
           categoryIds: JSON.parse(categoryIds || '[]'),
           preview: req.files?.preview?.[0]?.filename || null,
@@ -126,7 +124,6 @@ router.put(
         taskDescription,
         clientDescription,
         serviceDescription,
-        shop,
         blocks,
       } = req.body;
 
@@ -153,7 +150,6 @@ router.put(
           link,
           date,
           positionTop,
-          shop: shop === 'true',
           taskDescription,
           clientDescription,
           serviceDescription,

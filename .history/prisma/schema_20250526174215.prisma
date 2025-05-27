@@ -39,24 +39,23 @@ model Case {
   taskDescription    String
   clientDescription  String
   serviceDescription String
-  contentBlocks      Json
-  shop               Boolean @default(false)
+  contentBlocks      Json 
 }
 
 model Developer {
-  id         Int     @id @default(autoincrement())
-  name       String
-  position   String
-  email      String
-  avatar     String?
-  telegram   String?
-  instagram  String?
-  whatsapp   String?
-  vk         String?
-  tiktok     String?
-  behance    String?
-  pinterest  String?
-  artstation String?
+  id       Int     @id @default(autoincrement())
+  name     String
+  position String
+  email    String
+  avatar   String?
+     telegram String
+      instagram String
+      whatsapp String
+      vk String
+      tiktok String
+      behance String
+      pinterest String
+      artstation String
 }
 
 model Category {

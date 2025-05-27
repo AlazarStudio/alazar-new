@@ -79,12 +79,12 @@ router.put('/:id', upload.single('image'), async (req, res) => {
       avatar: req.file?.filename || dev.avatar,
       telegram: req.body.telegram,
       instagram: req.body.instagram,
-      whatsapp: req.body.whatsapp,
-      vk: req.body.vk,
-      tiktok: req.body.tiktok,
-      behance: req.body.behance,
-      pinterest: req.body.pinterest,
-      artstation: req.body.artstation,
+      whatsapp: req.body.w,
+      vk,
+      tiktok,
+      behance,
+      pinterest,
+      artstation,
     },
   });
   res.json(updated);

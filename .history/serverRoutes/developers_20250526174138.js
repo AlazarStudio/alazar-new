@@ -83,8 +83,8 @@ router.put('/:id', upload.single('image'), async (req, res) => {
       vk: req.body.vk,
       tiktok: req.body.tiktok,
       behance: req.body.behance,
-      pinterest: req.body.pinterest,
-      artstation: req.body.artstation,
+      pinterest: req.body.,
+      artstation,
     },
   });
   res.json(updated);
