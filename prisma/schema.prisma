@@ -29,7 +29,7 @@ model Case {
   title        String
   price        Int
   link         String
-  date         String
+  date         DateTime?
   positionTop  String
   preview      String?
   images       String[] @default([])
