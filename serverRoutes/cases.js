@@ -83,12 +83,12 @@ router.post(
       } = req.body;
 
       // Валидация обязательных полей
-      if (typeof title !== 'string' || !title.trim()) {
-        return res.status(400).json({ error: 'Не указан title' });
-      }
-      if (!price || isNaN(parseInt(price, 10))) {
-        return res.status(400).json({ error: 'Неверный price' });
-      }
+      // if (typeof title !== 'string' || !title.trim()) {
+      //   return res.status(400).json({ error: 'Не указан title' });
+      // }
+      // if (!price || isNaN(parseInt(price, 10))) {
+      //   return res.status(400).json({ error: 'Неверный price' });
+      // }
 
       // Парсинг JSON-полей с защитой от ошибок
       let parsedBlocksRaw = [];
