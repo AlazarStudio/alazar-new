@@ -29,9 +29,7 @@ const upload = multer({
   fileFilter: (req, file, cb) => {
     // принимаем только изображения
     if (!file.mimetype.startsWith('image/')) {
-      return cb(
-        new multer.MulterError('LIMIT_UNEXPECTED_FILE', file.fieldname)
-      );
+      return cb(new multer.MulterError('LIMIT_UNEXPECTED_FILE', file.fieldname));
     }
     cb(null, true);
   },
@@ -125,7 +123,7 @@ router.post(
       const created = await prisma.case.create({
         data: {
           title: title.trim(),
-          price: parseInt(price, 10) || null,
+          price: parseInt(price, 10),
           link: link || null,
           date: date ? new Date(date) : null,
           positionTop: positionTop || null,
@@ -206,9 +204,7 @@ router.put(
         try {
           devIds = JSON.parse(developerIds);
         } catch {
-          return res
-            .status(400)
-            .json({ error: 'Неверный формат developerIds' });
+          return res.status(400).json({ error: 'Неверный формат developerIds' });
         }
       }
 
@@ -263,8 +259,8 @@ router.delete('/:id', async (req, res) => {
   if (existing.preview) safeUnlink(existing.preview);
   (existing.images || []).forEach(safeUnlink);
   (existing.contentBlocks || [])
-    .filter((b) => b.type === 'image' && b.value)
-    .forEach((b) => safeUnlink(b.value));
+    .filter(b => b.type === 'image' && b.value)
+    .forEach(b => safeUnlink(b.value));
 
   await prisma.case.delete({ where: { id } });
   res.json({ success: true });
