@@ -125,7 +125,7 @@ router.post(
       const created = await prisma.case.create({
         data: {
           title: title.trim(),
-          price: price ? parseInt(price, 10) : null,
+          price: parseInt(price, 10),
           link: link || null,
           date: date ? new Date(date) : null,
           positionTop: positionTop || null,
